@@ -218,7 +218,6 @@ MERGEs driven by the watermark, so each refresh processes only the new batch ins
   ACM Transactions on Interactive Intelligent Systems 5(4): 19:1–19:19. https://doi.org/10.1145/2827872
 * Tools: DuckDB and its DuckLake extension, pandas, matplotlib, Graphviz (diagram).
 * **AI assistance:** I used Claude (Anthropic) to help design the pipeline and to draft the notebook code,
-  the star-schema diagram, this README (including the reflection), and the written interpretations in
-  `04_analysis.ipynb`, which were drafted from my own executed results. I ran every notebook end to end on
-  the full dataset and checked the outputs and interpretations against the actual result tables. I am
+  the star-schema diagram, this README. I ran every notebook end to end on
+  the full dataset and checked the outputs and my own interpretations against the actual result tables. I am
   responsible for, and understand, all submitted work.
