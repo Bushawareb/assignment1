@@ -185,3 +185,9 @@ cython_debug/
 
 # Built Visual Studio Code Extensions
 *.vsix
+assign1/data/raw/ml-25m/genome-scores.csv
+assign1/data/raw/ml-25m/genome-tags.csv
+assign1/data/raw/ml-25m/links.csv
+assign1/data/raw/ml-25m/movies.csv
+assign1/data/raw/ml-25m/ratings.csv
+assign1/data/raw/ml-25m/tags.csv
