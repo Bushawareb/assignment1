@@ -1,0 +1,61 @@
+// Gold star schema — render with:  dot -Tpng docs/star_schema.dot -o docs/star_schema.png
+digraph star {
+  graph [rankdir=LR, bgcolor="#fcfcfb", pad=0.4, nodesep=0.5, ranksep=0.9, fontname="Helvetica"];
+  node  [shape=plain, fontname="Helvetica", fontsize=11];
+  edge  [color="#52514e", arrowhead=none, penwidth=1.3, fontname="Helvetica", fontsize=9, fontcolor="#52514e"];
+
+  fact [label=<
+    <table border="0" cellborder="1" cellspacing="0" cellpadding="6" color="#2a78d6">
+      <tr><td bgcolor="#2a78d6"><font color="white"><b>gold.fact_rating</b></font></td></tr>
+      <tr><td bgcolor="#e8f1fc" align="left"><i>grain: one rating per user × movie</i></td></tr>
+      <tr><td align="left" port="u">user_key  <b>FK</b></td></tr>
+      <tr><td align="left" port="m">movie_key  <b>FK</b></td></tr>
+      <tr><td align="left" port="d">date_key  <b>FK</b></td></tr>
+      <tr><td align="left">rating  DECIMAL(2,1)  <i>measure</i></td></tr>
+      <tr><td align="left">is_positive  INT 0/1  <i>measure</i></td></tr>
+    </table>>];
+
+  dim_date [label=<
+    <table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#52514e">
+      <tr><td bgcolor="#52514e"><font color="white"><b>gold.dim_date</b></font>  <font color="#e4e3df">Q1</font></td></tr>
+      <tr><td align="left" port="k">date_key  <b>PK</b>  (YYYYMMDD)</td></tr>
+      <tr><td align="left">full_date, year, quarter, month,<br align="left"/>month_name, year_month,<br align="left"/>day_name, is_weekend<br align="left"/></td></tr>
+    </table>>];
+
+  dim_user [label=<
+    <table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#52514e">
+      <tr><td bgcolor="#52514e"><font color="white"><b>gold.dim_user</b></font>  <font color="#e4e3df">Q4</font></td></tr>
+      <tr><td align="left" port="k">user_key  <b>PK</b></td></tr>
+      <tr><td align="left">user_id (natural key), first_rating_date,<br align="left"/>lifetime_ratings, activity_segment,<br align="left"/>segment_order<br align="left"/></td></tr>
+    </table>>];
+
+  dim_movie [label=<
+    <table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#52514e">
+      <tr><td bgcolor="#52514e"><font color="white"><b>gold.dim_movie</b></font>  <font color="#e4e3df">Q3</font></td></tr>
+      <tr><td align="left" port="k">movie_key  <b>PK</b></td></tr>
+      <tr><td align="left">movie_id (natural key), title,<br align="left"/>release_year, release_decade,<br align="left"/>release_decade_start, genre_count<br align="left"/></td></tr>
+    </table>>];
+
+  bridge [label=<
+    <table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#a9a8a2" style="dashed">
+      <tr><td bgcolor="#e4e3df"><b>gold.bridge_movie_genre</b></td></tr>
+      <tr><td align="left" port="m">movie_key  <b>FK</b></td></tr>
+      <tr><td align="left" port="g">genre_key  <b>FK</b></td></tr>
+      <tr><td align="left">allocation_weight = 1 / genre_count</td></tr>
+    </table>>];
+
+  dim_genre [label=<
+    <table border="0" cellborder="1" cellspacing="0" cellpadding="5" color="#52514e">
+      <tr><td bgcolor="#52514e"><font color="white"><b>gold.dim_genre</b></font>  <font color="#e4e3df">Q2</font></td></tr>
+      <tr><td align="left" port="k">genre_key  <b>PK</b></td></tr>
+      <tr><td align="left">genre_name, is_content_genre</td></tr>
+    </table>>];
+
+  dim_date:k  -> fact:d [label="  1 : N  "];
+  dim_user:k  -> fact:u [label="  1 : N  "];
+  fact:m      -> dim_movie:k [label="  N : 1  "];
+  dim_movie:k -> bridge:m [label="  1 : N  "];
+  bridge:g    -> dim_genre:k [label="  N : 1  "];
+
+  {rank=same; dim_date; dim_user;}
+}

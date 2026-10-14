@@ -1,0 +1,9 @@
+# data and lakehouse are generated locally, never committed
+data/
+lakehouse/
+
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+*.part
+.DS_Store
